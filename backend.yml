@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: backend-deployment
+
+  labels:
+    app: backend
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+    metadata:
+      labels:
+        app: backend
+
+    spec:
+      containers:
+        - name: backend
+
+          image: klerith/k8s-teslo-backend:1.1.0
+
+          ports:
+            - containerPort: 3000
+
+          env:
+            - name: APP_VERSION
+              value: "1.1.0"
+
+            - name: PORT
+              value: "3000"
+
+            - name: STAGE
+              value: "prod"
+
+            - name: DB_NAME
+              valueFrom:
+                ConfigMapKeyRef:
+                  name: postgres-config
+                  key: DB_NAME
+
+            - name: DB_HOST
+              valueFrom:
+                ConfigMapKeyRef:
+                  name: postgres-config
+                  key: DB_HOST
+
+            - name: DB_PORT
+              valueFrom:
+                ConfigMapKeyRef:
+                  name: postgres-config
+                  key: DB_PORT
+
+            - name: DB_USERNAME
+              valueFrom:
+                ConfigMapKeyRef:
+                  name: postgres-secret
+                  key: DB_USER
+
+            - name: DB_PASSWORD
+              valueFrom:
+                ConfigMapKeyRef:
+                  name: postgres-secret
+                  key: DB_PASSWORD
+
+            - name: JWT_SECRET
+              valueFrom:
+                ConfigMapKeyRef:
+                  name: backend-secret
+                  key: JWT_SECRET
+
+            # hubieron error al correrlo por eso este fragment
+            - name: PGADMIN_CONFIG_ENHANCED_COOKIE
+              value: "False"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: NodePort
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000 # este se conecta con el puerto del deployment ln/30
+      NodePort: 30300 # Rango de puertos recomendados 30000- 32767

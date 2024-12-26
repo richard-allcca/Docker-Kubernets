@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+
+kind: Deployment # deployment
+
+# Identificador
+metadata:
+  name: postgres-deployment
+
+  labels:
+    app: postgres
+
+# Definición del POD
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: postgres
+
+  template:
+    metadata:
+      labels:
+        app: postgres
+
+    # Definición de contenedor o contenedores que montaremos
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15.1
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD # nombre env
+              valueFrom: # de donde obtiene el valor (secret file)
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: DB_PASSWORD
+
+# '---' Indica que es un nuevo archivo - este servicio siempre va con el deployment
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service # host del service
+spec:
+  selector:
+    app: postgres
+  ports:
+    - protocol: TCP
+      port: 5432 # puede ser cualquier puerto (conecta con el exterior)
+      targetPort: 5432 # este se conecta con el puerto del deployment ln/31

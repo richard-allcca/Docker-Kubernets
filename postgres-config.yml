@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap #
+metadata:
+  name: postgres-config # para identificarlo (no usa el nombre el archivo)
+data:
+  DB-NAME: postgres
+  DB-HOST: postgres-service # el host es el name del service (metadata)
+  DB-PORT: "5432" # numero de puerto por defecto de postgres
