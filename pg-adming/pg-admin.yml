@@ -1,3 +1,4 @@
+# Configuraciones del deployment
 apiVersion: apps/v1
 
 kind: Deployment
@@ -44,6 +45,8 @@ spec:
 
             - name: PGADMIN_CONFIG_ENHANCED_COOKIE # hubieron error al correrlo por eso este fragment
               value: "False"
+
+# Configuraciones del servicio
 ---
 apiVersion: v1
 kind: Service
