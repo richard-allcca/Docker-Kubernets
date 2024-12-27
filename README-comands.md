@@ -6,7 +6,7 @@
     kubectl get all
 ```
 
-## Crear PODS o Servicios
+## Crear PODS o Servicios en el cluster
 
  Ejecutar los Archivos en secuencia
 
@@ -34,6 +34,16 @@ Primero asegúrate que el deployment este arriba
     kubectl describe nameDeployComplete
 
     # en caso de algún error debes volver a aplicar los archivos en secuencia ln/8
+```
+
+## Exponer el servicio o imagen desplegada en el cluster
+
+```bash
+    minikube service nameDeploymentCorriendoQueQuieresExponer
+
+    # Example - si el nombre la tiene 'service/' elimina esa parte
+    minikube service service/pg-admin-service
+    minikube service pg-admin-service
 ```
 
 ## Para Backend
