@@ -41,37 +41,37 @@ spec:
 
             - name: DB_NAME
               valueFrom:
-                ConfigMapKeyRef:
+                configMapKeyRef: # referencia al config file
                   name: postgres-config
                   key: DB_NAME
 
             - name: DB_HOST
               valueFrom:
-                ConfigMapKeyRef:
+                configMapKeyRef:
                   name: postgres-config
                   key: DB_HOST
 
             - name: DB_PORT
               valueFrom:
-                ConfigMapKeyRef:
+                configMapKeyRef:
                   name: postgres-config
                   key: DB_PORT
 
             - name: DB_USERNAME
               valueFrom:
-                ConfigMapKeyRef:
+                secretKeyRef: # referencia al secret file
                   name: postgres-secret
                   key: DB_USER
 
             - name: DB_PASSWORD
               valueFrom:
-                ConfigMapKeyRef:
+                secretKeyRef:
                   name: postgres-secret
                   key: DB_PASSWORD
 
             - name: JWT_SECRET
               valueFrom:
-                ConfigMapKeyRef:
+                secretKeyRef:
                   name: backend-secret
                   key: JWT_SECRET
 
@@ -89,6 +89,6 @@ spec:
     app: backend
   ports:
     - protocol: TCP
-      port: 3000
+      port: 3000 # cualquier puerto
       targetPort: 3000 # este se conecta con el puerto del deployment ln/30
-      NodePort: 30300 # Rango de puertos recomendados 30000- 32767
+      nodePort: 30300 # Rango de puertos recomendados 30000- 32767
